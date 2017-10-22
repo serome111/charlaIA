@@ -2,7 +2,7 @@
 primeras50=[] #aqui se guardan todos los datos de entrada
 datosPreguta=[] #aqui se deben guardar los datos que hacen preguntas
 datosRespuesta=[] #aqui se guardan todas las respuestas
-datosPR?=[] #aqui se guardan las preguntas con sus respuestas
+datosPR=[] #aqui se guardan las preguntas con sus respuestas
 BuscarMayor=[] #aqui se agragan los numeros de repeticiones
 i = 0
 print "Welcome Lord"
