@@ -4,6 +4,7 @@ import sys
 class datos:
 	def __init__(self):
 		self.a="string"
+		self.vacio=[] # lista vacia necesaria para comparacion triste pero real
 		self.primeras50=[] # aqui se guardan todos los datos de entrada
 		self.datosRespuesta=[] # respuestas que se le ensenaron
 		self.datosPR={}
@@ -16,27 +17,27 @@ class datos:
 	def ensenar(self):
 		for contador in range (0,6):
 			self.a = raw_input("Lord:")
-			self.sistema()
+			self.Sistema()
+			self.Sobremi()
 			self.aprender()
 			if(self.a in self.datosPR): # si la palabra  ya tiene respuesta
-				print self.datosPR[self.a]
+				print self.datosPR[self.a] # imprime la respuesta
 
-			else:
-				self.primeras50.append(self.a)
-				while self.i<contador:
+			else: # si no la tiene
+				self.primeras50.append(self.a) # agrega la palabra a la lista primeras50
+				while self.i<contador: # mientras que 0 sea menor que contador
 					break
 		for contador in self.primeras50:
-			self.i += 1
+			self.i +=1
 			count = self.primeras50.count(self.primeras50[self.i-1]) # cuenta el numero de veces que esta la palabra en primeras50
-			# print count
-			# print "el dato ",self.primeras50[self.i-1],"se repite ",count, "veces "
+			#print self.primeras50
 			self.BuscarMayor.append(count)
-			# print(self.primeras50[])
+			#print self.BuscarMayor
 
+		if self.primeras50 == self.vacio: # si no existe ninguna palabra nueva preguntara de nuevo
+			self.ensenar()
 		posicion = self.BuscarMayor.index(max(self.BuscarMayor))
 		self.pregunta=self.primeras50[posicion] # aqui va la pregunta que mas se repite :v
-		print (contador)
-		print (self.BuscarMayor)
 		self.recordar()
 	def recordar(self):
 
@@ -45,11 +46,11 @@ class datos:
 		print "aprendio a decir -->",self.pregunta # datosRespuesta[0]
 		res = raw_input("Lord:")
 		self.datosPR[self.pregunta]=res
-		print(self.datosPR)
+		#print(self.datosPR) ###############################################
 		self.primras50=[]
 		self.i=0
 		self.BuscarMayor=[]
-		print ("Este es self.datosRespuesta" , self.datosRespuesta)
+		#print ("Este es self.datosRespuesta" , self.datosRespuesta)
 		while (self.pregunta in self.primeras50):
 			self.primeras50.remove(self.pregunta)
 		self.ensenar()
@@ -61,10 +62,14 @@ class datos:
 			self.datosRespuesta = raw_input("cual es la respuesta: ")
 			self.datosPR[self.nuevaPOT]=self.datosRespuesta # aqui se guarda la pregunta y la respuesta
 			self.ensenar()
-	def sistema(self):
+	def Sistema(self):
 
 		if (self.a == "salir"):
 			exit()
+	def Sobremi(self):
+		if self.a == "primeras50":
+			print self.primeras50
+
 
 per=datos()
 per.ensenar()
