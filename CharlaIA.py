@@ -1,6 +1,11 @@
+ 
 #!/usr/bin/python
+#######################################
+##Creado por: Sebastian Roa meneses ###
+#######################################
 import sys
-
+"""falta regresion lineal sobre cada respuesta para tener siempre la mejor respuesta
+    falta agragar reconocimiento de voz, reconocimiento facial, etc...."""
 class datos:
 	def __init__(self):
 		self.a="string"
@@ -12,7 +17,7 @@ class datos:
 		self.i=0
 		self.pregunta=""
 		self.c=0
-		self.aprende=["aprende esto","aprende esto","se dice a si"] # en uso
+		self.aprende=["aprende esto","aprendizaje","se dice a si"] # en uso
 		self.nuevaPOT=[] # nueva palabra o texto
 	def ensenar(self):
 		for contador in range (0,6):
@@ -67,7 +72,18 @@ class datos:
 		if (self.a == "salir"):
 			exit()
 	def Sobremi(self):
-		if self.a == "primeras50":
+		if self.a == "--help":
+			print ("#############################")
+			print "##","  Palabras reservadas    ","##"
+			print "##","                         ","##"
+			print "##","  Preguntas y Respuestas ","##"
+			print "##","  -Primeras50            ","##"
+			print "##","  Aprende esto           ","##"
+			print "##","  Se dice a si           ","##"
+			print ("#############################")
+		elif(self.a == "Preguntas y Respuestas"):
+			print self.datosPR
+		elif(self.a == "-primeras50"):
 			print self.primeras50
 
 
