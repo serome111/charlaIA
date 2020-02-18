@@ -1,4 +1,4 @@
- #!/usr/bin/python
+ #!/usr/bin/python3
 #######################################
 ##Creado por: Sebastian Roa meneses ###
 #######################################
@@ -8,10 +8,12 @@ import csv
 
 if sys.platform == 'linux' or sys.platform == 'linux2':
 	limpiarPantalla = 'clear'
-else:
+elif sys.platform == 'Windows':
 	limpiarPantalla = 'cls'
+else:
+	os.system('clear')
+	limpiarPantalla = 'clear'
 
-os.system(limpiarPantalla)
 """falta regresion lineal sobre cada pregunta y su respuesta para tener siempre la mejor respuesta
     falta agragar reconocimiento de voz, reconocimiento facial, argregar npl procesamiento de lenguaje natural, regresion lineal simple euristica etc...."""
 class datos:
@@ -31,16 +33,16 @@ class datos:
 		self.nuevaPOT=[] # nueva palabra o texto
 	def yo(self):
 
-		self.Nombre = raw_input("Nombre :")
+		self.Nombre = input("Nombre :")
 
 	def ensenar(self):
 		for contador in range (0,6):
-			self.a = raw_input(" Lord: ")
+			self.a = input(" Lord: ")
 			self.Sistema()
 			self.Sobremi()
 			self.aprender()
 			if(self.a in self.datosPR): # si la palabra  ya tiene respuesta
-				print "",self.Nombre," --> ",self.datosPR[self.a] # imprime la respuesta
+				print ("",self.Nombre," --> ",self.datosPR[self.a]) # imprime la respuesta
 
 			else: # si no la tiene
 				self.primeras50.append(self.a) # agrega la palabra a la lista primeras50
@@ -58,8 +60,8 @@ class datos:
 		self.recordar()
 	def recordar(self):
 
-		print " ",self.Nombre, " --> ", self.pregunta # datosRespuesta[0]
-		self.datosRespuesta = raw_input(" Lord: ")
+		print (" ",self.Nombre, " --> ", self.pregunta) # datosRespuesta[0]
+		self.datosRespuesta = input(" Lord: ")
 		self.datosPR[self.pregunta]=self.datosRespuesta # aqui se guarda la pregunta y la respuesta
 		self.csv()
 		#print(self.datosPR)
@@ -72,83 +74,79 @@ class datos:
 	def aprender(self):
 
 		if (self.a == self.aprende[0] or self.a == self.aprende[1] or self.a == self.aprende[2]):
-			print "Genial necesito aprender dime"
-			self.pregunta = raw_input("Cual es la pregunta: ") # self.nuevaPOT
-			self.datosRespuesta = raw_input("cual es la respuesta: ")
+			print ("Genial necesito aprender dime")
+			self.pregunta = input("Cual es la pregunta: ") # self.nuevaPOT
+			self.datosRespuesta = input("cual es la respuesta: ")
 			self.datosPR[self.pregunta]=self.datosRespuesta # aqui se guarda la pregunta y la respuesta self.nuevaPOT
 			self.csv()
 			self.ensenar()
 	def Sistema(self):
 
 		if (self.a == "salir"):
+			self.almacenar() #antes de salir guarda todo
 			exit()
 		elif(self.a == "clear"):
 			os.system('clear')
 	def Sobremi(self):
 		if self.a == "--help":
 			print ("#############################")
-			print "##","  Palabras reservadas    ","##"
-			print "##","                         ","##"
-			print "##","  Preguntas y Respuestas ","##"
-			print "##","  -primeras50            ","##"
-			print "##","  Aprende esto           ","##"
-			print "##","  Se dice a si           ","##"
+			print ("##","  Palabras reservadas    ","##")
+			print ("##","                         ","##")
+			print ("##","  Preguntas y Respuestas ","##")
+			print ("##","  -primeras50            ","##")
+			print ("##","  Aprende esto           ","##")
+			print ("##","  Se dice a si           ","##")
 			print ("#############################")
 		elif(self.a == "Preguntas y Respuestas"):
-			print self.datosPR
+			print (self.datosPR)
 		elif(self.a == "-primeras50"):
-			print self.primeras50
-		elif(self.a == "Guardar primeras50"):
+			print (self.primeras50)
+		elif(self.a == "Guardar primeras50"): #esto no esta agregado en la vista pero se mejorara posteriormente
 			self.almacenar()
 
 	def csv(self): # este es utilizado para crear el csv y para anexar palabras nuevas
-		if not os.path.exists("Datos_De_Entrenamiento.csv"):
-			crear_archivo = csv.writer(open("Datos_De_Entrenamiento.csv","wb"))
-		else:
-			archivo = csv.writer(open("Datos_De_Entrenamiento.csv","ab"))
-			archivo.writerow([self.pregunta,self.datosRespuesta])
+		archivo = csv.writer(open("Datos_De_Entrenamiento.csv","a", newline=''))#ab
+		archivo.writerow([self.pregunta,self.datosRespuesta])
 
 	def entrenar(self):
-		archivo = csv.reader(open("Datos_De_Entrenamiento.csv","rb"))
+		archivo = csv.reader(open("Datos_De_Entrenamiento.csv","r"))
 		for index,row in enumerate(archivo):
 			self.datosPR[row[0]]=row[1]
 			# print "pregunta", row[0]
 			# print "respuesta",row[1]
 	def almacenar(self):
-		if not os.path.exists("primeras50.csv"):
-			C_archivo = csv.writer(open("primeras50.csv","wb"))
-		else:
-			archivo_1 = csv.writer(open("primeras50.csv","ab"))
-			for index,row in enumerate(self.primeras50):
-				archivo_1.writerow([self.primeras50[index]])
-				cantidad = str(index+1)
+		archivo_1 = csv.writer(open("primeras50.csv","a", newline=''))
+		for index,row in enumerate(self.primeras50):
+			archivo_1.writerow([self.primeras50[index]])
+			cantidad = str(index+1)
 
-			print "se han Guardado ", cantidad, "datos"
+		print ("se han Guardado ", cantidad, "datos")
 
 	def entrenar2(self):
 
-		archivo_3 = csv.reader(open("primeras50.csv","rb"))
+		archivo_3 = csv.reader(open("primeras50.csv","r"))
 		for index,row in enumerate(archivo_3):
 			self.primeras50.append(row[0])
 
 
 per=datos()
-print "                 Bienvenido                       "
-print " para iniciar por favor llene la informacion necesaria"
-print " "
-print " Escribe el nombre que le daras a tu Robot"
+print ("                 Bienvenido                       ")
+print (" para iniciar por favor llene la informacion necesaria")
+print (" ")
+print (" Escribe el nombre que le daras a tu Robot")
 per.yo()
-print " Deseas cargar datos de entrenamiento"
-print " Digite 'si' o 'no' "
-print ""
-pg= raw_input("-->> ")
+print (" Deseas cargar datos de entrenamiento")
+print (" Digite 'si' o 'no' ")
+print ("")
+pg= input("-->> ")
 if(pg == "si"):
 	per.entrenar()
-	print " Desea cargar las preguntas sin responder?"
-	print " Digite 'si o 'no'' "
-	pg2= raw_input("-->> ")
+	print (" Desea cargar las preguntas sin responder?")
+	print (" Digite 'si o 'no'' ")
+	pg2= input("-->> ")
 	if(pg2 == "si"):
 		per.entrenar2()
 
 os.system('clear')
 per.ensenar()
+
