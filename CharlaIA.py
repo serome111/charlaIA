@@ -149,3 +149,4 @@ if(pg == "si"):
 
 os.system('clear')
 per.ensenar()
+
