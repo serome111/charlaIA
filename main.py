@@ -1,49 +1,67 @@
-from flask import Flask, escape, request, make_response,redirect, render_template
-#from flask_wtf import FlaskForm # libreria para formularios
-#from wtforms.fields import StringField, PasswordField, SubmitField #capturar string y contraseñas
-#from wtforms.validators import DataRequired # para agregar los required en los imputs
+#como determinar una palabra que corta
+
+#quiza requiera pip install -U flask-cors
+from flask import Flask, render_template, request,redirect,url_for,jsonify,make_response
+from flask_mysqldb import MySQL
+import cerebro as cr
+
 app = Flask(__name__)
-
-todos=['TODO 1','TODO 2','TODO 3']
-
-#class LoginForm(FlaskForm):
-	#username = StringField('Nombre de usuario', validators=[DataRequired()])
-	#password = PasswordField('password', validators=[DataRequired()])
-	#submit = SubmitField('Enviar')
-
-app.errorhandler(404)
-def not_found(error):
-	return render_template('404.html', error=error)
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_DB'] = 'CharlaIA'
+mysql = MySQL(app)
 
 @app.route('/')
-def index():
-	user_ip = request.remote_addr
-	response = make_response(redirect('/hello'))
-	response.set_cookie('user_ip',user_ip)
+def Index():
+	return render_template('setup.html')
 
-	return response
+@app.route('/sistema')
+def sistema():
+	print('apagando el sistema')
+	#return url_for("index.html")
+	return redirect(url_for('Index'))
 
-@app.route('/base', methods=['GET','POST'])
-def base():
-	user_ip = request.remote_addr
-	response = make_response(redirect('/base'))
-	response.set_cookie('user_ip',user_ip)
+@app.route('/setup', methods=['POST'])
+def setup():
+	cur = mysql.connection.cursor()
+	cur.execute('SELECT nombre,estado,conciencia FROM setup')
+	data = cur.fetchall()
+	return render_template('index.html', data = jsonify(data[0]))
 
-	return response
+@app.route('/get_data', methods=['POST'])
+def get_data():
+	if request.method == 'POST':
+		palabra = request.form['palabra']
+		if(palabra == 'salir'):
+			print('llamando al sistema')
+			return redirect(url_for('sistema'))
+			#return sistema()
+		else:
+			nombre = 'Serome'
+			conciencia = 'si'
+			usuario = 'serome'
+			mc = cr.cerebro()
+			mc.transmisor(palabra)
+			return jsonify(palabra)
+		# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
+		# data = cur.fetchall()
+		# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
+		# data = cur.fetchall()
+		# return render_template('base.html', palabra = palabra)
 
-@app.route('/hello')
-def hello():
-	user_ip = request.cookies.get('user_ip')
-	user_ip = request.remote_addr
-	#login_form = LoginForm()
-	context ={
-	'user_ip': user_ip,
-	'todos': todos,
-	#'login_form': login_form
-	}
+@app.route('/nueva_conciencia', methods=['POST'])
+def nueva_conciencia():
+	if request.method == 'POST':
+		palabra = request.form['palabra']
+		nombre = 'Serome'
+		conciencia = 'si'
+		usuario = 'serome'
+		cur = mysql.connection.cursor()
+		cur.execute('INSERT INTO setup (nombre,conciencia,usuario) VALUES (%s, %s, %s)',(nombre,conciencia,usuario))
+		mysql.connection.commit()
 
-	return render_template('index.html',**context)
-	#'Hello worlds tu ip es{}'.format(user_ip)
-	#     name = request.args.get("name", "World")
-	#     return f'Hello, {escape(name)}!'
 
+
+if __name__ == '__main__':
+	app.run(port = 3000, debug = True)

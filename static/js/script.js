@@ -3,7 +3,19 @@
   // Reference：https://codepen.io/supah/pen/jqOBqp
   // It's Cool ! ↑
   var fakeMsg, fakeNum, isTyping, messages, uctTimer;
+  let nombre, estado,conciencia
 
+  //Setup establecido
+  fetch('/setup')
+  .then( res => res.json())
+  .then( data => {
+    nombre = data[0]
+    estado = data[1]
+    conciencia = data[2]
+    console.log("Setup->:"+data);
+    }).catch(error =>{
+    console.log('Se ha encontrado un error en el archivo o web que se hace la peticion');
+  })
   messages = $(".messages-content");
 
   fakeNum = 0;
@@ -18,7 +30,6 @@
       return isTyping = true;
     }, 3500);
   };
-
   window.setDate = function() {
     var d, timestamp;
     timestamp = $("<div>").addClass("timestamp");
@@ -33,19 +44,39 @@
       timeout: 0
     });
   };
-
-  fakeMsg = ["Hola, me dicen Lord y tu como te llamas? "," Mucho gusto "," ¿Cómo te va? "," Bastante bien "," ¿Cómo te ha estado tratando la vida? "," Podría ser peor, gracias "," Tengo que irme ahora "," Fue un placer conversar contigo "," Adiós :)"];
-            []
-  window.setFakeMessage = function() {
+   //console.log( {{ setup }} )
+  fakeMsg = ["Hola, me dicen Serome y tu como te llamas?"," Mucho gusto "," ¿Cómo te va? "," Bastante bien "," ¿Cómo te ha estado tratando la vida? "," Podría ser peor. "," Tengo que irme ahora "," Fue un placer conversar contigo "," Adiós :)"];
+  let cont=0;
+  window.setFakeMessage = function(palabra) {
     var typing;
-    typing = $("<div>").append("<span>").addClass("Escribiendo mensaje");
+    typing = $("<div>").append("<span>").addClass("message  typing");
     typing.appendTo($('.mCSB_container'));
     updateScrollbar();
     return setTimeout(function() {
       var msg;
       typing.remove();
       msg = $("<div>").addClass("message");
+      
+      if(cont == 0){
+
+        var datos = new FormData();
+        datos.append('palabra', palabra);
+
+        fetch('/get_data',{
+          method: 'POST',
+          body: datos
+         })
+        .then( res => res.json())
+        .then( data => {
+          console.log("fetch->:"+data);
+          }).catch(error =>{
+          console.log('Se ha encontrado un error en el archivo o web que se hace la peticion');
+        })
+        
+
+      }
       msg.text(fakeMsg[fakeNum]);
+      //msg.text('palabra');
       msg.appendTo($('.mCSB_container'));
       setDate();
       updateScrollbar();
@@ -72,7 +103,7 @@
       return false;
     }
     return setTimeout(function() {
-      return setFakeMessage();
+      return setFakeMessage(msgText);
     }, 500 + (Math.random() * 10) * 100);
   };
 
