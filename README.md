@@ -12,11 +12,16 @@ Se esta creando una herramienta para generar una comunicacion algo fluida para t
 * Web API con fask
 * Facilidad en la usabilidad
 * Bases de datos
-* Recoleccion y busqueda de informacion
-* Uso te teorema de bayes
-* Uso PNL
+* Recoleccion y busqueda de informacion [pendiente]
+* Uso te teorema de bayes [pendiente]
+* Uso PNL [pendiente]
 
 *Nota: Las caracteristicas se ampliaran con poca longevidad, así que en cualquier momento puede haber una actualización.*
+
+###Recursos a tener en cuenta
+
+* https://youtu.be/XgXPxrEg0rA
+* https://www.youtube.com/watch?v=ayQglkLE36I
 
 ## Contribuyentes
 

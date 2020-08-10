@@ -11,16 +11,13 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'CharlaIA'
 mysql = MySQL(app)
+#inicializar variables aqui
+#estado = pendiente /que espera una respuesta para continuar
+estado_palabra='normal'
 
 @app.route('/')
 def Index():
 	return render_template('setup.html')
-
-@app.route('/sistema')
-def sistema():
-	print('apagando el sistema')
-	#return url_for("index.html")
-	return redirect(url_for('Index'))
 
 @app.route('/setup', methods=['POST'])
 def setup():
@@ -31,24 +28,26 @@ def setup():
 
 @app.route('/get_data', methods=['POST'])
 def get_data():
+	global estado_palabra
+	nombre = 'Serome'
+	conciencia = 'si'
+	usuario = 'serome'
 	if request.method == 'POST':
-		palabra = request.form['palabra']
-		if(palabra == 'salir'):
-			print('llamando al sistema')
-			return redirect(url_for('sistema'))
-			#return sistema()
-		else:
-			nombre = 'Serome'
-			conciencia = 'si'
-			usuario = 'serome'
-			mc = cr.cerebro()
-			mc.transmisor(palabra)
-			return jsonify(palabra)
-		# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
-		# data = cur.fetchall()
-		# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
-		# data = cur.fetchall()
-		# return render_template('base.html', palabra = palabra)
+		palabrau = request.form['palabra']
+		mc = cr.cerebro()
+		respuestaCerebro = mc.transmisor(nombre,conciencia,usuario,palabrau,estado_palabra)
+		#print('respuesta cerebro-->',respuestaCerebro[1])
+		estado_palabra = respuestaCerebro[1]
+		return jsonify(respuestaCerebro,'-')
+		# if(respuestaCerebro == '/'):
+		# 	return jsonify('/')
+		
+		
+	# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
+	# data = cur.fetchall()
+	# cur.execute('SELECT usuariosh_id,nombre,apellidos,correo FROM usuariosh')
+	# data = cur.fetchall()
+	# return render_template('base.html', palabra = palabra)
 
 @app.route('/nueva_conciencia', methods=['POST'])
 def nueva_conciencia():

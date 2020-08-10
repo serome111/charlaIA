@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request,redirect,url_for,jsonify,make_response
 from flask_mysqldb import MySQL
-
+import random
 class cerebro:
 	def __init__(self):
 
-		self.Nombre = "Serome"
-		self.palabra="string"
+		self.Nombre  = "Serome"
+		self.palabra = "string"
+		self.estadoPalabra  = 'normal'
 		self.vacio=[] # lista vacia necesaria para comparacion triste pero real
 		self.primeras50=[] # aqui se guardan todos los datos de entrada
 		self.datosRespuesta=[] # respuestas que se le ensenaron
@@ -17,14 +18,22 @@ class cerebro:
 		self.aprende=["aprende esto","aprendizaje","se dice a si"] # en uso
 		self.nuevaPOT=[] # nueva palabra o texto
 
-	def pruebas(self,palabra):
+	def transmisor(self,nombre,conciencia,usuario,palabra,estado):
 		self.palabra = palabra
-		print(palabra)
+		self.estadoPalabra = estado
+		print('estado que llega->',estado)
+		respuesta_sistema = self.sistema(palabra)
+		if(respuesta_sistema[0] == 'url'):
+			return 'url'
+		
+		print('transmisor-->',palabra)
+		aprender = self.aprender()
+		print('<------>',aprender)
+		if(aprender[0] == True):
+			print('retornando',self.estadoPalabra)
+			return (aprender[1],self.estadoPalabra)
 
-	def transmisor(self,palabra):
-		self.palabra = palabra
-		self.sistema(palabra)
-		# self.aprender()
+		print('fin de ejecucion')
 		# if(self.a in self.datosPR): # si la palabra  ya tiene respuesta
 		# 	print ("",self.Nombre," --> ",self.datosPR[self.a]) # imprime la respuesta
 
@@ -55,23 +64,45 @@ class cerebro:
 		self.BuscarMayor=[]
 		while (self.pregunta in self.primeras50):
 			self.primeras50.remove(self.pregunta)
-		self.ensenar()
 
 	def aprender(self):
-
-		if (self.a == self.aprende[0] or self.a == self.aprende[1] or self.a == self.aprende[2]):
-			print ("Genial necesito aprender dime")
-			self.pregunta = input("Cual es la pregunta: ") # self.nuevaPOT
-			self.datosRespuesta = input("cual es la respuesta: ")
-			self.datosPR[self.pregunta]=self.datosRespuesta # aqui se guarda la pregunta y la respuesta self.nuevaPOT
-			self.csv()
-			self.ensenar()
+		print('aprendiendo',self.estadoPalabra)
+		if(self.estadoPalabra == 'normal'):
+			print('entro')
+			if (self.palabra == self.aprende[0] or self.palabra == self.aprende[1] or self.palabra == self.aprende[2]):
+				self.estadoPalabra = 'aPendiente'
+				r = [True,"Genial necesito aprender dime ¿Cual es la pregunta?"]
+				return r
+				#self.pregunta = input("¿Cual es la pregunta?") # self.nuevaPOT
+		elif(self.estadoPalabra == 'aPendiente'):
+			print('llego palabra pendiente')
+			self.pregunta = self.palabra
+			self.estadoPalabra = 'arPendiente'
+			print('pregunta guardada-->',self.pregunta)
+			r = [True,"¿Que deberia decir entonces?"]
+			return r
+		elif(self.estadoPalabra == 'arPendiente'):
+			self.estadoPalabra = 'normal'
+			print('la pregunta es->',self.pregunta,' la respues es->',self.palabra)
+			#self.datosPR[self.pregunta]=self.datosRespuesta # aqui se guarda la pregunta y la respuesta self.nuevaPOT
+			#self.csv()
+			self.silencio()
+		else:
+			return (False,'-')
 
 	def sistema(self,palabra):
-		print(palabra)
+		#el sistema tendra palabras espesificas para funciones espesificas como:
+		#reconocimiento facil
+		#reconocimiento de voz
+		#text to speach entre otros
+		print('Revisando funciones del sistema')
 		if (palabra == "salir"):
 			print('Apagando sistema')
-			return redirect(url_for('Index'))
+			res = ['url','/']
+			return res
+		else:
+			return ('noSistema',palabra)
+			print('No es una funcion del sistema')
 		
 
 	def csv(self): # este es utilizado para crear el csv y para anexar palabras nuevas
@@ -97,3 +128,8 @@ class cerebro:
 		archivo_3 = csv.reader(open("primeras50.csv","r"))
 		for index,row in enumerate(archivo_3):
 			self.primeras50.append(row[0])
+	def silencio(self):
+		palabraRandom = ['Sebastian bach era un buen compositor','el silencio puede ser incomodo para una computadoraen un mundo con tanto ruido','que otra cosa me cuentas','que tal va tu dia?']
+		resRandom =random.choice(palabraRandom)
+		print('random->',resRandom)
+		return resRandom

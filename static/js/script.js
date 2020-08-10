@@ -68,7 +68,11 @@
          })
         .then( res => res.json())
         .then( data => {
-          console.log("fetch->:"+data);
+          if(data[0] === 'url'){
+            //console.log('Redireccionando');
+            window.location.href = "/";
+          }
+          console.log("el-fetch->:"+data);
           }).catch(error =>{
           console.log('Se ha encontrado un error en el archivo o web que se hace la peticion');
         })
