@@ -25,6 +25,24 @@ Se esta creando una herramienta para generar una comunicacion algo fluida para t
 
  Flask
 * https://youtu.be/IgCfZkR8wME
+
+
+
+ Psicologia
+
+ Aprendizaje por imitacion
+* https://youtu.be/VAeGvCFYnNI
+ 
+ Como aprendemos segun Conductismo
+* https://youtu.be/eGa1NaUFbaM
+ aprendizaje por refuerzo
+https://youtu.be/vxytyW9HPBk
+
+
+### Por investigar
+ Modelo GPDP
+ Modelo Redes Neuronales Recurrentes
+
 ## Contribuyentes
 
 * Sebastian Roa Menenes
