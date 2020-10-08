@@ -43,6 +43,12 @@ https://youtu.be/vxytyW9HPBk
  Modelo GPDP
  Modelo Redes Neuronales Recurrentes
 
+## articulos
+ https://arxiv.org/pdf/1705.04304.pdf  Un modelo profundamente reforzado para el resumen abstractivo 'predicción de palabras supervisada estándar y el aprendizaje por refuerzo (RL)'
+ https://doi.org/10.1162/neco.1997.9.8.1735 Long Short-Term Memory
+ https://arxiv.org/pdf/1605.06676.pdf Learning to Communicate with Deep Multi-Agent Reinforcement Learning
+ 
+
 ## Contribuyentes
 
 * Sebastian Roa Menenes
