@@ -18,11 +18,13 @@ Se esta creando una herramienta para generar una comunicacion algo fluida para t
 
 *Nota: Las caracteristicas se ampliaran con poca longevidad, así que en cualquier momento puede haber una actualización.*
 
-###Recursos a tener en cuenta
+### Recursos a tener en cuenta
 
 * https://youtu.be/XgXPxrEg0rA
 * https://www.youtube.com/watch?v=ayQglkLE36I
 
+ Flask
+* https://youtu.be/IgCfZkR8wME
 ## Contribuyentes
 
 * Sebastian Roa Menenes
